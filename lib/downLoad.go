@@ -18,11 +18,18 @@ func GetPicName(url string) string {
 
 // to get the Image name
 
-func BatchDownLoad(urlList string, outDir string) error {
+func BatchDownLoad(urlList []string, outDir string) error {
 	err := DirCheck(outDir)
-	
+	for _, url := range urlList {
+		errDown := DownLoad(url, GetPicName(url))
+		if errDown != nil {
+			return errDown
+		}
+	}
 	return err
 }
+
+// to batch download
 
 func DownLoad(url string, outFile string) error {
 	request, err := http.NewRequest(http.MethodGet, url, nil)
