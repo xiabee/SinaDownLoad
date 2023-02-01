@@ -18,7 +18,13 @@ func GetPicName(url string) string {
 
 // to get the Image name
 
-func DownLoad(url string, outPut string) error {
+func BatchDownLoad(urlList string, outDir string) error {
+	err := DirCheck(outDir)
+	
+	return err
+}
+
+func DownLoad(url string, outFile string) error {
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return err
@@ -43,11 +49,11 @@ func DownLoad(url string, outPut string) error {
 
 	res, _ := io.ReadAll(resp.Body)
 
-	out, err := os.Create(outPut)
+	out, err := os.Create(outFile)
 	if err != nil {
 		fmt.Println(err)
 	}
 	io.Copy(out, bytes.NewReader(res))
-	fmt.Println("Download " + outPut + " successfully!")
+	fmt.Println("Download " + outFile + " successfully!")
 	return err
 }

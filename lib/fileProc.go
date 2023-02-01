@@ -18,6 +18,17 @@ func PathExists(path string) (bool, error) {
 
 // to check if the path exists
 
+func DirCheck(dir string) error {
+	exist, err := PathExists(dir)
+	if !exist {
+		errdir := os.Mkdir(dir, os.ModePerm)
+		if errdir != nil {
+			return errdir
+		}
+	}
+	return err
+}
+
 func IsDir(path string) bool {
 	s, err := os.Stat(path)
 	if err != nil {
@@ -27,6 +38,7 @@ func IsDir(path string) bool {
 }
 
 // to check the dir
+
 func PathProc(path string) (string, error) {
 	_, err := PathExists(path)
 	if path[len(path)-1:] != "/" {
