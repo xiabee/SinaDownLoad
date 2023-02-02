@@ -29,6 +29,15 @@ func ReadLines(filename string) ([]string, error) {
 
 // Parse the text, return a slice
 
+func GetPicName(url string) string {
+	restr := "(\\w|\\d|_)*.(jpg|png|jpeg)"
+	reg, _ := regexp.Compile(restr)
+	name := reg.FindString(url)
+	return name
+}
+
+// to get the Image name
+
 func UrlFinding(filename string) ([]string, error) {
 	regImg := "(img|image|imag)"
 	regUrl := "(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*(:(0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\+&amp;%$#_]*)?"
@@ -45,9 +54,12 @@ func UrlFinding(filename string) ([]string, error) {
 			continue
 		}
 		regu := regexp.MustCompile(regUrl)
-		url := regu.FindStringSubmatch(line)[0]
+		if regu.FindString(line) != "" {
+			url := regu.FindString(line)
+			urlList = append(urlList, url, GetPicName(url))
+		}
 		// find the first url
-		urlList = append(urlList, url)
+
 	}
 	return urlList, err
 }

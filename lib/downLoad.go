@@ -6,22 +6,16 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"regexp"
 )
 
-func GetPicName(url string) string {
-	restr := "(\\w|\\d|_)*.(jpg|png|jpeg)"
-	reg, _ := regexp.Compile(restr)
-	name := reg.FindStringSubmatch(url)[0]
-	return name
-}
+func BatchDownLoad(urlList []string, dir string, outDir string) error {
+	pwd, _ := os.Getwd()
+	fmt.Println("Download Pics in " + pwd + "/" + dir)
+	// output the location
 
-// to get the Image name
-
-func BatchDownLoad(urlList []string, outDir string) error {
 	err := DirCheck(outDir)
 	for _, url := range urlList {
-		errDown := DownLoad(url, GetPicName(url))
+		errDown := DownLoad(url, dir, GetPicName(url))
 		if errDown != nil {
 			return errDown
 		}
@@ -31,7 +25,7 @@ func BatchDownLoad(urlList []string, outDir string) error {
 
 // to batch download
 
-func DownLoad(url string, outFile string) error {
+func DownLoad(url string, dir string, outFile string) error {
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return err
@@ -56,9 +50,16 @@ func DownLoad(url string, outFile string) error {
 
 	res, _ := io.ReadAll(resp.Body)
 
-	out, err := os.Create(outFile)
+	pwd, _ := os.Getwd()
+	pwdProc, _ := PathProc(pwd)
+	dirProc, _ := PathProc(dir)
+
+	DirCheck(pwdProc + dirProc)
+	// TO create the dir
+	out, err := os.Create(pwdProc + dirProc + outFile)
 	if err != nil {
 		fmt.Println(err)
+		return err
 	}
 	io.Copy(out, bytes.NewReader(res))
 	fmt.Println("Download " + outFile + " successfully!")

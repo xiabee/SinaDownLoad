@@ -1,8 +1,8 @@
 package lib
 
 import (
-	"fmt"
 	"os"
+	"path/filepath"
 )
 
 func PathExists(path string) (bool, error) {
@@ -29,6 +29,8 @@ func DirCheck(dir string) error {
 	return err
 }
 
+// to check and create the Dir
+
 func IsDir(path string) bool {
 	s, err := os.Stat(path)
 	if err != nil {
@@ -47,17 +49,17 @@ func PathProc(path string) (string, error) {
 	return path, err
 }
 
-func GetFileName(path string) ([]os.DirEntry, error) {
-	path, _ = PathProc(path)
-	files, err := os.ReadDir(path)
-	var result []os.DirEntry
-	for _, f := range files {
-		if IsDir(path + f.Name() + "/") {
-			GetFileName(path + f.Name() + "/")
-		} else {
-			fmt.Println(path + f.Name())
-			result = append(result, f)
+func GetFileName(root string) ([]string, error) {
+	var files []string
+
+	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if !IsDir(path) {
+			files = append(files, path)
 		}
-	}
-	return result, err
+		return nil
+	})
+
+	return files, err
 }
+
+// get the files in certain dir
