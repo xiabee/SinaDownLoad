@@ -2,7 +2,6 @@ package main
 
 import (
 	"SinaDownLoad/lib"
-	"fmt"
 )
 
 func main() {
@@ -12,25 +11,23 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	// get files
 
 	var urlList []string
 	for _, file := range files {
-		urls, _ := lib.UrlFinding(file)
+		urls, errFind := lib.UrlFinding(file)
+		if errFind != nil {
+			panic(errFind)
+		}
 		for _, url := range urls {
 			urlList = append(urlList, url)
 		}
-		for _, url := range urlList {
-			fmt.Println(url, file)
-		}
+	}
+	// get Image URLs
+
+	errDown := lib.BatchDownLoad(urlList, "Download")
+	if errDown != nil {
+		panic(errDown)
 	}
 
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	//for _, url := range urlList {
-	//	fmt.Println(url)
-	//}
-	//url := "https://tva1.sinaimg.cn/large/0084b03xgy1h58pm1gs0uj30y20iu0za.jpg"
-	//
-	//lib.DownLoad(url, "download", lib.GetPicName(url))
 }

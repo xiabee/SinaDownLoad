@@ -8,11 +8,11 @@ import (
 	"os"
 )
 
-func BatchDownLoad(urlList []string, dir string, outDir string) error {
+func BatchDownLoad(urlList []string, dir string) error {
 	pwd, _ := os.Getwd()
 	fmt.Println("Download Pics in " + pwd + "/" + dir)
 	// output the location
-
+	outDir := pwd + "/" + dir
 	err := DirCheck(outDir)
 	for _, url := range urlList {
 		errDown := DownLoad(url, dir, GetPicName(url))

@@ -48,7 +48,7 @@ func UrlFinding(filename string) ([]string, error) {
 	lines, err := ReadLines(filename)
 	for _, line := range lines {
 		regi := regexp.MustCompile(regImg)
-		result := regi.FindAllStringSubmatch(line, -1)
+		result := regi.FindAllString(line, -1)
 		// locate the image URI, find all
 		if result == nil {
 			continue
@@ -56,7 +56,7 @@ func UrlFinding(filename string) ([]string, error) {
 		regu := regexp.MustCompile(regUrl)
 		if regu.FindString(line) != "" {
 			url := regu.FindString(line)
-			urlList = append(urlList, url, GetPicName(url))
+			urlList = append(urlList, url)
 		}
 		// find the first url
 
