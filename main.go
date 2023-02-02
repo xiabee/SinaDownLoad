@@ -6,6 +6,7 @@ import (
 
 func main() {
 	path := "/Users/xiabee/Desktop/GitHub/gitpage/source/_posts"
+	// change your path here
 
 	files, err := lib.GetFileName(path)
 	if err != nil {
@@ -26,6 +27,8 @@ func main() {
 	// get Image URLs
 
 	errDown := lib.BatchDownLoad(urlList, "Download")
+	// Here to change target dir
+
 	if errDown != nil {
 		panic(errDown)
 	}
