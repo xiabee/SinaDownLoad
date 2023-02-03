@@ -44,7 +44,7 @@ func DownLoad(url string, dir string, outFile string) error {
 		return err
 	}
 	if resp.StatusCode != http.StatusOK {
-		fmt.Println("Error! " + resp.Status)
+		fmt.Println("Error! " + resp.Status + " " + url)
 	}
 	defer resp.Body.Close()
 
@@ -56,12 +56,16 @@ func DownLoad(url string, dir string, outFile string) error {
 
 	DirCheck(pwdProc + dirProc)
 	// TO create the dir
-	out, err := os.Create(pwdProc + dirProc + outFile)
-	if err != nil {
-		fmt.Println(err)
-		return err
+
+	if outFile != "" {
+		out, err := os.Create(pwdProc + dirProc + outFile)
+		if err != nil {
+			return err
+		}
+		io.Copy(out, bytes.NewReader(res))
+		fmt.Println("Download " + outFile + " successfully!")
 	}
-	io.Copy(out, bytes.NewReader(res))
-	fmt.Println("Download " + outFile + " successfully!")
+	// if status==404, outFile will be ""
+
 	return err
 }
