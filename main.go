@@ -2,11 +2,25 @@ package main
 
 import (
 	"SinaDownLoad/lib"
+	"fmt"
+	"os"
 )
 
 func main() {
-	path := "/Users/xiabee/Desktop/GitHub/gitpage/source/_posts"
-	// change your path here
+	pwd, _ := os.Getwd()
+	fmt.Print("[+] Directory to be processed: [" + pwd + "]:")
+	var path string
+	fmt.Scanln(&path)
+	if path == "" {
+		path = pwd
+	}
+
+	var targetDir string
+	fmt.Print("[+] Download location:[Download]:")
+	fmt.Scanln(&targetDir)
+	if targetDir == "" {
+		targetDir = "Download"
+	}
 
 	files, err := lib.GetFileName(path)
 	if err != nil {
@@ -26,7 +40,7 @@ func main() {
 	}
 	// get Image URLs
 
-	errDown := lib.BatchDownLoad(urlList, "Download")
+	errDown := lib.BatchDownLoad(urlList, targetDir)
 	// Here to change target dir
 
 	if errDown != nil {

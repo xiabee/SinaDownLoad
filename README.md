@@ -25,22 +25,25 @@ go build
 
 ## 下载内容
 
-修改 `main.go` 中的 `path`：此目录为需要操作的根目录，本程序会自动读取目录内的所有文件，找到图片并下载到指定文件夹
+* 程序会提示输入需要下载的内容的目录，默认目录为当前工作目录
+
+* 程序会自动读取目录内的所有文件，找到图片并下载到指定文件夹
+* 仅支持绝对路径
 
 ```go
-path := "/Users/xiabee/Desktop/GitHub/gitpage/source/_posts"
-// change your path here
+[+] Directory to be processed: [/Users/xiabee/Desktop/GitHub/SinaDownLoad]：
 ```
 
 
 
 ## 目标位置
 
-* 程序会在当前目录中创建 `Download` 目录，图片下载在该目录中
+* 程序会提示输入目标位置，默认目录为当前目录下创建的 `Download` 目录
 
-* `main.go` 中的 `Download` 字符串可以自定义修改，修改后即为下载图片的目标位置（仅支持相对路径）
+* 仅支持相对路径
+
 
 ```go
-errDown := lib.BatchDownLoad(urlList, "Download")
+[+] Download location:[Download]：
 ```
 
